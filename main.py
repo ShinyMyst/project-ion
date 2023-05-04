@@ -1,36 +1,38 @@
 import pyttsx3
 import speech_recognition as sr
 import openai
+import from api import key
 
 # Prepare Text to Speech
 tts = pyttsx3.init()
 voices = tts.getProperty('voices')
 tts.setProperty('voice', voices[1].id)
-tts.setProperty('rate', rate-50)
 
 # Prepare Microphone
 listener = sr.Recognizer()
 listener.non_speaking_duration = 0.5
-rate = 48000 # Default is 16000
-with sr.Microphone(sample_rate=rate) as source: 
+rate = 48000  # Default is 16000
+with sr.Microphone(sample_rate=rate) as source:
     listener.adjust_for_ambient_noise(source)
 
 # Prepare OpenAi
-openai.api_key = "NOT PROVIDED"
-model = "text-davinci-002" # Ada
+openai.api_key = key
+model = "text-davinci-002"  # Ada
+
 
 def gpt_response(prompt: str):
     completions = openai.Completion.create(
-    engine=model,
-    prompt=prompt,
-    max_tokens=60,
-    n=1,
-    stop=None,
-    temperature=0.5,)
+        engine=model,
+        prompt=prompt,
+        max_tokens=60,
+        n=1,
+        stop=None,
+        temperature=0.5,)
 
     message = completions.choices[0].text.strip()
     return message
-    
+
+
 def process_text(text):
     text.lower()
     print("You said:", text)
@@ -46,10 +48,12 @@ def process_text(text):
     else:
         chat("I don't know what you're talking about.")
 
+
 def chat(message: str):
     tts.say(message)
     print(message)
     tts.runAndWait()
+
 
 def main():
     listening = True
@@ -62,12 +66,12 @@ def main():
             text = listener.recognize_google(audio)
             process_text(text)
 
-
-
         except sr.UnknownValueError:
             chat("Could not understand audio.")
 
         except sr.RequestError as e:
             print("Could not request results; {0}".format(e))
 
-main()
+
+if __name__ == "__main__":
+    main()
