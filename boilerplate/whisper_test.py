@@ -1,10 +1,18 @@
-import os
-import api
 import openai
-
+import api
+import os
 
 openai.api_key = api.key
-audio_file = open("sample.mp3", "rb")
-transcript = openai.Audio.transcribe("whisper-1", audio_file)
-print(transcript.text)
 
+# Get the  path of the script
+script_dir = os.path.dirname(os.path.abspath(__file__))
+file_name = "output.wav"
+file_path = os.path.join(script_dir, file_name)
+
+# Open the audio file and extract aduio
+audio_file = open(file_path, "rb")
+transcript = openai.Audio.transcribe("whisper-1", audio_file)
+text = transcript.text
+audio_file.close()
+
+print(text)
