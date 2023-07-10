@@ -22,7 +22,7 @@ def read_message(message):
 
     response = requests.post(url, json=data, headers=headers)
     print(response.status_code)
-    with open('output.mp3', 'wb') as f:
+    with open('output.wav', 'wb') as f:
         f.write(response.content)
 
 

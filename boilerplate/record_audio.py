@@ -40,4 +40,4 @@ def record_audio(filename, duration):
 
 
 # Usage example:
-record_audio("output.wav", 5)  # Record for 5 seconds & save to output.wav
+record_audio("input.wav", 5)  # Record for 5 seconds & save to output.wav
