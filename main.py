@@ -12,7 +12,7 @@ tts.setProperty('voice', voices[1].id)
 listener = sr.Recognizer()
 listener.non_speaking_duration = 0.5
 rate = 48000  # Default is 16000
-listener.energy_threshold = 4000  # Manually adjust threshold
+listener.energy_threshold = 1000  # Manually adjust threshold
 
 # Prepare OpenAi
 openai.api_key = key

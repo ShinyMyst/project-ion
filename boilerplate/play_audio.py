@@ -1,5 +1,6 @@
 import pygame
 
+
 def play_audio_file(file_path):
     pygame.mixer.init()
     pygame.mixer.music.load(file_path)
