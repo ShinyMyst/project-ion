@@ -18,6 +18,7 @@ Input Method Tab (Switch one on and all others go off or on)
 Microphone Settings Tab
 -Adjust all the microphone input parameters
 -Sample rate, timeout, etc
+-Min/max value and click/drag bar?
 
 Try Sphinx for keyword recognition because speed > accuracy at that point
 

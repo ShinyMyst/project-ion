@@ -12,44 +12,42 @@ if __name__ == "__main__":
     main()
 """
 
-# Create the main application window
 window = tk.Tk()
-window.title("Tabbed Application")
-window.geometry("400x300")  # Set the size of the window
+window.title("Project Ion")
+window.geometry("400x300")
 
-
-# Create a notebook (tabbed interface)
 notebook = ttk.Notebook(window)
 
-# Tab 1
-tab1 = ttk.Frame(notebook)
-notebook.add(tab1, text="Input Methods")
-label1 = ttk.Label(tab1, text="Method")
-label1.pack()
+# Input Options
+input_tab = ttk.Frame()
+notebook.add(input_tab, text="Input Methods")
+ttk.Label(input_tab, text="Input Tab").pack()
 
-# Tab 2
-tab2 = ttk.Frame(notebook)
-notebook.add(tab2, text="AI Options")
-label2 = ttk.Label(tab2, text="This is Tab 2")
-label2.pack()
+# AI Options
+ai_tab = ttk.Frame()
+notebook.add(ai_tab, text="AI Options")
+child1 = ttk.Label(ai_tab, text="AI Line 1")
+child2 = ttk.Label(ai_tab, text="AI Line 2")
+for c in sorted(ai_tab.children):
+    print(c)
+    ai_tab.children[c].pack()
 
-# Tab 2
-tab4 = ttk.Frame(notebook)
-notebook.add(tab4, text="Voice")
-label4 = ttk.Label(tab2, text="This is Tab")
-label4.pack()
+# Voice OPtions
+voice_tab = ttk.Frame()
+notebook.add(voice_tab, text="Voice")
 
-# Microphone Settings
-tab3 = ttk.Frame(notebook)
-notebook.add(tab3, text="Microphone")
-settings_frame = ttk.Frame(tab3)
+
+# Microphone Options
+microphone_tab = ttk.Frame()
+notebook.add(microphone_tab, text="Microphone")
+settings_frame = ttk.Frame(microphone_tab)
 settings_frame.pack(pady=10)
 
-# Tab 2
-tab5 = ttk.Frame(notebook)
-notebook.add(tab5, text="API")
-label5 = ttk.Label(tab2, text="This is Tab")
-label5.pack()
+# API Options
+api_tab = ttk.Frame()
+notebook.add(api_tab, text="API")
+
+
 
 # Volume label and entry box
 volume_label = ttk.Label(settings_frame, text="Volume:")
@@ -94,11 +92,11 @@ def update_microphone():
 
 
 # Button to update volume
-update_button = ttk.Button(tab3, text="Update Microphone", command=update_microphone)
+update_button = ttk.Button(microphone_tab, text="Update Microphone", command=update_microphone)
 update_button.pack(pady=10)
 
 # Label to display the current volume
-current_volume_label = ttk.Label(tab3, textvariable=volume)
+current_volume_label = ttk.Label(microphone_tab, textvariable=volume)
 current_volume_label.pack()
 
 energy_scale.bind("<B1-Motion>", on_energy_change)
@@ -108,5 +106,3 @@ notebook.pack(expand=True, fill=tk.BOTH)
 
 # Start the application
 window.mainloop()
-
-# Input, Voice, Microhphone AI
