@@ -40,41 +40,48 @@ notebook.add(voice_tab, text="Voice")
 # Microphone Options
 microphone_tab = ttk.Frame()
 notebook.add(microphone_tab, text="Microphone")
-settings_frame = ttk.Frame(microphone_tab)
-settings_frame.pack(pady=10)
+frame = ttk.Frame(microphone_tab)
+frame.pack(pady=10)
 
 # API Options
 api_tab = ttk.Frame()
 notebook.add(api_tab, text="API")
 
 # Volume label and entry box
-volume_label = ttk.Label(settings_frame, text="Volume:").pack()
+volume_label = ttk.Label(frame, text="Volume:").pack()
 
 # Tone label and entry box
-tone_label = ttk.Label(settings_frame, text="Tone:").pack()
+tone_label = ttk.Label(frame, text="Tone:").pack()
 
 # Volume variable
 volume = tk.StringVar()
 tone = tk.StringVar()
 energy = tk.StringVar()
 
-# Energy Threshold setting
-energy_label = ttk.Label(settings_frame, text="Energy Threshold:").pack()
 
-# Create a horizontal slider for Energy Threshold
-energy_scale = ttk.Scale(settings_frame, from_=0, to=400, orient="horizontal", length=200)
-energy_scale.set(20)  # Set the default value
-energy_scale.pack()
-
-# Label to display the current value
-value_label = ttk.Label(settings_frame, text="Current Value: " + str(int(energy_scale.get()) * 100))
-value_label.pack()
+class SlidingScale:
+    def __init__(self, frame, label: str, def_val: int, max_val: int, interval: int):
+        self.frame = frame
+        ttk.Label(self.frame, text=f"{label}:").pack()
+        self._create_scale_bar(max_val, def_val)
+        self._create_scale_label(def_val)
 
 
-# Function to handle slider value changes
-def on_energy_change(event):
-    energy_threshold = int(energy_scale.get()) * 100 +200   # can't get rid of offset without this
-    value_label.configure(text="Current Value: " + str(energy_threshold))
+    def _create_scale_bar(self, max_val, def_val):
+        self.scale_bar = ttk.Scale(self.frame, to=max_val, orient="horizontal", length=200)  # noqa
+        self.scale_bar.set(def_val)  # Set the default value
+        self.scale_bar.pack()
+        self.scale_bar.bind("<B1-Motion>", self.on_change)
+
+    def _create_scale_label(self, def_val):
+        self.scale_label = ttk.Label(self.frame,  text="Current Value: " + str(def_val))  # noqa
+        self.scale_label.pack()
+
+    def on_change(self, event):
+        value = int(self.scale_bar.get())
+        self.scale_label.configure(text="Current Value: " + str(value))
+
+
 
 
 def update_microphone():
@@ -82,12 +89,15 @@ def update_microphone():
     energy_value = int(energy_scale.get()) * 100
     print(energy_value)
 
+SlidingScale(frame, "Energy Threshold", 2000, 40000, 100)
+
+
 # Button to update volume
 update_button = ttk.Button(microphone_tab, text="Update Microphone", command=update_microphone)
 update_button.pack(pady=10)
 
 
-energy_scale.bind("<B1-Motion>", on_energy_change)
+#energy_scale.bind("<B1-Motion>", on_energy_change)
 
 # Add the notebook to the main window
 notebook.pack(expand=True, fill=tk.BOTH)
