@@ -47,28 +47,19 @@ settings_frame.pack(pady=10)
 api_tab = ttk.Frame()
 notebook.add(api_tab, text="API")
 
-
-
 # Volume label and entry box
-volume_label = ttk.Label(settings_frame, text="Volume:")
-volume_label.pack()
-volume_entry = ttk.Entry(settings_frame)
-volume_entry.pack()
+volume_label = ttk.Label(settings_frame, text="Volume:").pack()
 
 # Tone label and entry box
-tone_label = ttk.Label(settings_frame, text="Tone:")
-tone_label.pack()
-tone_entry = ttk.Entry(settings_frame)
-tone_entry.pack()
+tone_label = ttk.Label(settings_frame, text="Tone:").pack()
 
 # Volume variable
 volume = tk.StringVar()
 tone = tk.StringVar()
+energy = tk.StringVar()
 
 # Energy Threshold setting
-energy_label = ttk.Label(settings_frame, text="Energy Threshold:")
-energy_label.pack()
-
+energy_label = ttk.Label(settings_frame, text="Energy Threshold:").pack()
 
 # Create a horizontal slider for Energy Threshold
 energy_scale = ttk.Scale(settings_frame, from_=0, to=400, orient="horizontal", length=200)
@@ -82,22 +73,19 @@ value_label.pack()
 
 # Function to handle slider value changes
 def on_energy_change(event):
-    energy_threshold = int(energy_scale.get()) * 100
+    energy_threshold = int(energy_scale.get()) * 100 +200   # can't get rid of offset without this
     value_label.configure(text="Current Value: " + str(energy_threshold))
 
 
 def update_microphone():
-    volume.set(volume_entry.get())
-    tone.set(tone_entry.get())
-
+    print("TOUCH")
+    energy_value = int(energy_scale.get()) * 100
+    print(energy_value)
 
 # Button to update volume
 update_button = ttk.Button(microphone_tab, text="Update Microphone", command=update_microphone)
 update_button.pack(pady=10)
 
-# Label to display the current volume
-current_volume_label = ttk.Label(microphone_tab, textvariable=volume)
-current_volume_label.pack()
 
 energy_scale.bind("<B1-Motion>", on_energy_change)
 
