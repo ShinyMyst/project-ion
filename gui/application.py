@@ -22,11 +22,18 @@ class App:
         self._create_microphone_tab()
 
     # TODO - Toggle between sphinx/google/keyword sphinx
-    # TODO - Toggle between input methods (keyword, convo, hold)
     def _create_input_tab(self):
         input_tab = ttk.Frame()
         self.notebook.add(input_tab, text="Input Methods")
-        ttk.Label(input_tab, text="Input Tab").pack()
+        option = tk.StringVar()
+        tk.Radiobutton(input_tab, text="Single Question", variable=option, value="Single Question")
+        tk.Radiobutton(input_tab, text="Keyword", variable=option, value="Keyword Mode")
+        tk.Radiobutton(input_tab, text="Conversation", variable=option, value="Conversation")
+        tk.Radiobutton(input_tab, text="Press to Talk", variable=option, value="Press to Talk")
+        tk.Radiobutton(input_tab, text="Text", variable=option, value="Text")
+        for child in sorted(input_tab.children):
+            input_tab.children[child].pack()
+
 
     # TODO - Toggle between testing mode/chatgpt mode
     # TODO - Model selection
@@ -45,7 +52,6 @@ class App:
         self.notebook.add(voice_tab, text="Voice")
 
     # TODO - Adjust values to scale properly
-    # TODO - reogranize the tab
     def _create_microphone_tab(self):
         microphone_tab = ttk.Frame()
         self.notebook.add(microphone_tab, text="Microphone")
@@ -64,9 +70,6 @@ class App:
             microphone_tab, "Non-Speaking Duration", 0)
         # SlidingScale(microphone_tab, "Chunk Size", 1024, 8192, 100)                 # Change scaling to 2 to a power.
 
-    def get_microphone_values(self):
-        self.var_energy_threshold.get_value()
-        self.var_sample_rate.get_value()
 
     def _create_api_tab(self):
         api_tab = ttk.Frame()
