@@ -34,7 +34,6 @@ class App:
         for child in sorted(input_tab.children):
             input_tab.children[child].pack()
 
-
     # TODO - Toggle between testing mode/chatgpt mode
     # TODO - Model selection
     # TODO - Personality selection
@@ -68,12 +67,16 @@ class App:
             microphone_tab, "Timeout", 0)
         self.var_phrase_time_limit = TextBox(
             microphone_tab, "Non-Speaking Duration", 0)
-        # SlidingScale(microphone_tab, "Chunk Size", 1024, 8192, 100)                 # Change scaling to 2 to a power.
-
+        # SlidingScale(microphone_tab, "Chunk Size", 1024, 8192, 100)                 # Change scaling to 2 to a power.  # noqa
 
     def _create_api_tab(self):
         api_tab = ttk.Frame()
         self.notebook.add(api_tab, text="API")
+
+        self.api_11labs = TextBox(
+            api_tab, "11Labs API", "")
+        self.api_gpt = TextBox(
+            api_tab, "OpenAI API", "")
 
 
 class TextBox:
