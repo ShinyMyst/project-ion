@@ -31,19 +31,31 @@ class App:
         tk.Radiobutton(input_tab, text="Conversation", variable=option, value="Conversation")
         tk.Radiobutton(input_tab, text="Press to Talk", variable=option, value="Press to Talk")
         tk.Radiobutton(input_tab, text="Text", variable=option, value="Text")
+
         for child in sorted(input_tab.children):
             input_tab.children[child].pack()
 
-    # TODO - Toggle between testing mode/chatgpt mode
-    # TODO - Model selection
     # TODO - Personality selection
     def _create_ai_tab(self):
         ai_tab = ttk.Frame()
         self.notebook.add(ai_tab, text="AI Options")
-        ttk.Label(ai_tab, text="AI Line 1")
-        ttk.Label(ai_tab, text="AI Line 2")
-        for child in sorted(ai_tab.children):
-            ai_tab.children[child].pack()
+        models = ["text-davinci-002"]
+        dropdown_var = tk.StringVar()
+        dropdown_var.set(models[0])
+        ttk.Combobox(ai_tab, textvariable=dropdown_var, values=models, state="readonly").pack()
+        self.temperature = SlidingScale(
+            ai_tab, "Randomness", 0.5, 2, 0.1)
+        self.max_tokens = TextBox(
+            ai_tab, "Max Response Length", 60)
+
+        self.var_adjust_for_ambient_noise = ToggleBox(
+            ai_tab, "AI On", True)
+
+        personality = ["Default"]
+        dropdown_var = tk.StringVar()
+        dropdown_var.set(personality[0])
+        ttk.Combobox(ai_tab, textvariable=dropdown_var, values=personality, state="readonly").pack()
+
 
     # TODO - Toggle between 11labs and default speech
     def _create_voice_tab(self):
@@ -55,17 +67,17 @@ class App:
         microphone_tab = ttk.Frame()
         self.notebook.add(microphone_tab, text="Microphone")
 
-        self.var_energy_threshold = SlidingScale(
+        self.energy_threshold = SlidingScale(
             microphone_tab, "Energy Threshold", 2000, 40000, 100)
-        self.var_sample_rate = SlidingScale(
+        self.sample_rate = SlidingScale(
             microphone_tab, "Sample Rate", 40000, 50000, 100)
-        self.var_adjust_for_ambient_noise = ToggleBox(
+        self.adjust_for_ambient_noise = ToggleBox(
             microphone_tab, "Adjust Ambient Noise", True)
-        self.var_non_speaking_duration = TextBox(
+        self.non_speaking_duration = TextBox(
             microphone_tab, "Non-Speaking Duration", .5)
-        self.var_timeout = TextBox(
+        self.timeout = TextBox(
             microphone_tab, "Timeout", 0)
-        self.var_phrase_time_limit = TextBox(
+        self.phrase_time_limit = TextBox(
             microphone_tab, "Non-Speaking Duration", 0)
         # SlidingScale(microphone_tab, "Chunk Size", 1024, 8192, 100)                 # Change scaling to 2 to a power.  # noqa
 
@@ -127,3 +139,5 @@ class SlidingScale:
 
     def get_value(self):
         return (self.scale_bar.get() // self.interval) * self.interval
+
+

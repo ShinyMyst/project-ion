@@ -58,8 +58,6 @@ class SpeechRecognition:
             engine=self.model,
             prompt=prompt,
             max_tokens=self.max_tokens,
-            n=1,
-            stop=None,
             temperature=self.temperature,)
 
         message = completions.choices[0].text.strip()
@@ -84,3 +82,5 @@ class SpeechRecognition:
         self.tts.say(message)
         print(message)
         self.tts.runAndWait()
+
+# TODO - Need to set it up to retain converastion history.
