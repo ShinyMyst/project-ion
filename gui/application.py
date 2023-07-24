@@ -21,7 +21,7 @@ class App:
         self._create_voice_tab()
         self._create_microphone_tab()
 
-    # TODO - Toggle between sphinx/google/keyword sphinx
+    # TODO default selection works correctly
     def _create_input_tab(self):
         input_tab = ttk.Frame()
         self.notebook.add(input_tab, text="Input Methods")
@@ -35,10 +35,12 @@ class App:
         for child in sorted(input_tab.children):
             input_tab.children[child].pack()
 
-    # TODO - Personality selection
+    # TODO Title for dropdowns
+    # TODO Correct decimal scaling
     def _create_ai_tab(self):
-        ai_tab = ttk.Frame()
+        ai_tab = ttk.Frame(self.notebook)
         self.notebook.add(ai_tab, text="AI Options")
+
         models = ["text-davinci-002"]
         dropdown_var = tk.StringVar()
         dropdown_var.set(models[0])
@@ -47,22 +49,19 @@ class App:
             ai_tab, "Randomness", 0.5, 2, 0.1)
         self.max_tokens = TextBox(
             ai_tab, "Max Response Length", 60)
-
         self.var_adjust_for_ambient_noise = ToggleBox(
             ai_tab, "AI On", True)
 
-        personality = ["Default"]
-        dropdown_var = tk.StringVar()
-        dropdown_var.set(personality[0])
-        ttk.Combobox(ai_tab, textvariable=dropdown_var, values=personality, state="readonly").pack()
+        personality_options = ("Default")
+        DropDown(ai_tab, "Personality", personality_options)
 
-
-    # TODO - Toggle between 11labs and default speech
     def _create_voice_tab(self):
         voice_tab = ttk.Frame()
         self.notebook.add(voice_tab, text="Voice")
+        source_options = ("Basic", "11Labs")
+        DropDown(voice_tab, "Source", source_options)
 
-    # TODO - Adjust values to scale properly
+
     def _create_microphone_tab(self):
         microphone_tab = ttk.Frame()
         self.notebook.add(microphone_tab, text="Microphone")
@@ -89,6 +88,18 @@ class App:
             api_tab, "11Labs API", "")
         self.api_gpt = TextBox(
             api_tab, "OpenAI API", "")
+
+class DropDown:
+    def __init__(self, tab, label:str, options: tuple):
+        tk.Label(tab, text=f"{label}:").pack()
+        self.var = tk.StringVar()
+        dropdown = ttk.Combobox(tab, textvariable=self.var, state="readonly")
+        dropdown['values'] = options
+        dropdown.current(0)
+        dropdown.pack()
+
+    def get_value(self):
+        return self.var.get()
 
 
 class TextBox:
@@ -140,4 +151,7 @@ class SlidingScale:
     def get_value(self):
         return (self.scale_bar.get() // self.interval) * self.interval
 
-
+# TODO - Correct formatting
+# TODO - Confirm Default Values
+# TODO - Provide option to toggle between Google and Sphinx for offline checks.
+# TODO - Different voice options depending on source
