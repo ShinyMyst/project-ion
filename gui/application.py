@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from microphone import SpeechRecognition
 
 
 class App:
@@ -32,8 +33,25 @@ class App:
         tk.Radiobutton(input_tab, text="Press to Talk", variable=option, value="Press to Talk")
         tk.Radiobutton(input_tab, text="Text", variable=option, value="Text")
 
+        tk.Button(input_tab, text="Start Mic", command=lambda:
+            self._create_mic(self._get_parameters))
+
         for child in sorted(input_tab.children):
             input_tab.children[child].pack()
+
+    def _get_parameters(self):
+        """Get all parameters for setting up the microphone."""
+        parameters = []
+        parameters.append(self.energy_threshold)
+        parameters.append(self.sample_rate)
+        parameters.append(self.adjust_for_ambient_noise)
+        parameters.append(self.non_speaking_duration)
+        parameters.append(self.timeout)
+        parameters.append(self.phrase_time_limit)
+        return parameters
+
+    def _create_mic(self, parameters):
+        SpeechRecognition(parameters)
 
     # TODO Title for dropdowns
     # TODO Correct decimal scaling
@@ -41,10 +59,8 @@ class App:
         ai_tab = ttk.Frame(self.notebook)
         self.notebook.add(ai_tab, text="AI Options")
 
-        models = ["text-davinci-002"]
-        dropdown_var = tk.StringVar()
-        dropdown_var.set(models[0])
-        ttk.Combobox(ai_tab, textvariable=dropdown_var, values=models, state="readonly").pack()
+        models = ("text-davinci-002"])
+        DropDown(ai_tab, "Models", models)
         self.temperature = SlidingScale(
             ai_tab, "Randomness", 0.5, 2, 0.1)
         self.max_tokens = TextBox(
@@ -151,6 +167,8 @@ class SlidingScale:
     def get_value(self):
         return (self.scale_bar.get() // self.interval) * self.interval
 
+# TODO - Play button to start microphone
+# TODO - Microphone formatted based on app data
 # TODO - Correct formatting
 # TODO - Confirm Default Values
 # TODO - Provide option to toggle between Google and Sphinx for offline checks.
