@@ -22,7 +22,6 @@ class App:
         self._create_voice_tab()
         self._create_microphone_tab()
 
-    # TODO default selection works correctly
     def _create_input_tab(self):
         input_tab = ttk.Frame()
         self.notebook.add(input_tab, text="Input Methods")
@@ -33,8 +32,7 @@ class App:
         tk.Radiobutton(input_tab, text="Press to Talk", variable=option, value="Press to Talk")
         tk.Radiobutton(input_tab, text="Text", variable=option, value="Text")
 
-        tk.Button(input_tab, text="Start Mic", command=lambda:
-            self._create_mic(self._get_parameters))
+        tk.Button(input_tab, text="Start Mic", command=self._create_mic)
 
         for child in sorted(input_tab.children):
             input_tab.children[child].pack()
@@ -42,16 +40,17 @@ class App:
     def _get_parameters(self):
         """Get all parameters for setting up the microphone."""
         parameters = []
-        parameters.append(self.energy_threshold)
-        parameters.append(self.sample_rate)
-        parameters.append(self.adjust_for_ambient_noise)
-        parameters.append(self.non_speaking_duration)
-        parameters.append(self.timeout)
-        parameters.append(self.phrase_time_limit)
+        parameters.append(self.energy_threshold.get_value())
+        parameters.append(int(self.sample_rate.get_value()))
+        parameters.append(self.adjust_for_ambient_noise.get_value())
+        parameters.append(float(self.non_speaking_duration.get_value()))
+        parameters.append(int(self.timeout.get_value()))
+        parameters.append(int(self.phrase_time_limit.get_value()))
+        print(parameters)
         return parameters
 
-    def _create_mic(self, parameters):
-        SpeechRecognition(parameters)
+    def _create_mic(self):
+        SpeechRecognition(self._get_parameters())
 
     # TODO Title for dropdowns
     # TODO Correct decimal scaling
@@ -59,7 +58,7 @@ class App:
         ai_tab = ttk.Frame(self.notebook)
         self.notebook.add(ai_tab, text="AI Options")
 
-        models = ("text-davinci-002"])
+        models = ("text-davinci-002")
         DropDown(ai_tab, "Models", models)
         self.temperature = SlidingScale(
             ai_tab, "Randomness", 0.5, 2, 0.1)
@@ -167,9 +166,9 @@ class SlidingScale:
     def get_value(self):
         return (self.scale_bar.get() // self.interval) * self.interval
 
-# TODO - Play button to start microphone
-# TODO - Microphone formatted based on app data
+# TODO - Implement more of the application parameters in the mic
 # TODO - Correct formatting
+# TODO - GUI doesn't freeze while microphone running
 # TODO - Confirm Default Values
 # TODO - Provide option to toggle between Google and Sphinx for offline checks.
 # TODO - Different voice options depending on source
