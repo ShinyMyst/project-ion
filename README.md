@@ -1,5 +1,6 @@
-Testing applications with the openai.  Current goal is to get a UI that helps tweak microphone input.
-
+# Overall Goals of Project
+- Use OpenAI API to generate responses- Use Speech to Text to generate a prompt for OpenAPI and read response with Text to Speech
+- Create a UI to improve interactions.  Including response style and microphone settings
 
 # TODO - Future Plans
 
